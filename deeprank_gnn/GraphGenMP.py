@@ -7,6 +7,8 @@ import time
 import multiprocessing as mp
 from functools import partial
 import pickle
+import torch
+from Bio.PDB.PDBParser import PDBParser
 
 from .ResidueGraph import ResidueGraph
 from .Graph import Graph
@@ -110,6 +112,29 @@ class GraphHDF5(object):
                         print(e)
                     f.close()
                     os.remove(name)
+                    
+           
+        #add embedding to the hdf5 file
+        f = h5py.File(outfile, 'r+')
+        mols = f.keys()
+        for mol in mols:
+            residues = f[mol]['nodes'][()]
+            embedding_tersor = torch.empty(len(residues), 1280)
+            pdb_file = [i for i in pdbs if mol in i][0]
+            for i in range(len(residues)):
+                chainID = residues[i][0].decode()
+                resID = residues[i][1].decode()
+                pt_name = mol + '.' + chainID + '.pt'
+                pt_path = os.path.join(embedding_path, pt_name)
+                res_number = int(resID) - self.get_starting_res(pdb_file, chainID) 
+                try:
+                    embedding = torch.load(pt_path)["representations"][33][res_number]
+                    embedding_tersor[i] = embedding
+                except:
+                    embedding_tersor[i] = torch.zeros(1280)
+            f.create_dataset(f'/{mol}/node_data/embedding', data=embedding_tersor)
+        
+        f.close()
 
         # clean up
         rmfiles = glob.glob(
@@ -203,3 +228,13 @@ class GraphHDF5(object):
                     raise FileNotFoundError(
                         'PSSM file for ' + mol_name + ' not found')
         return pssm
+    
+    
+    @staticmethod
+    def get_starting_res(pdb_file, chainID):
+        """Get the starting residue in a chain"""
+        parser= PDBParser()
+        structure = parser.get_structure('protein', pdb_file)
+        chain = structure[0][chainID]
+        start_res= next(chain.get_residues()).get_id()[1]
+        return start_res
