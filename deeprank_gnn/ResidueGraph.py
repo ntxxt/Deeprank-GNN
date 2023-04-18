@@ -40,9 +40,9 @@ class ResidueGraph(Graph):
         self.contact_distance = contact_distance
         self.internal_contact_distance = internal_contact_distance
 
-        self.residue_charge = {'CYS': -0.64, 'HIS': -0.29, 'ASN': -1.22, 'GLN': -1.22, 'SER': -0.80, 'THR': -0.80, 'TYR': -0.80,
-                               'TRP': -0.79, 'ALA': -0.37, 'PHE': -0.37, 'GLY': -0.37, 'ILE': -0.37, 'VAL': -0.37, 'MET': -0.37,
-                               'PRO': 0.0, 'LEU': -0.37, 'GLU': -1.37, 'ASP': -1.37, 'LYS': -0.36, 'ARG': -1.65}
+        self.residue_charge = {'CYS': 2.5, 'HIS': -3.20, 'ASN': -3.50, 'GLN': -3.50, 'SER': -0.80, 'THR': -0.70, 'TYR': -1.30,
+                               'TRP': -0.90, 'ALA': 1.8, 'PHE': 2.8, 'GLY': -0.4, 'ILE': 4.50, 'VAL': 4.20, 'MET': 1.9,
+                               'PRO': -1.60, 'LEU': 3.80, 'GLU': -3.50, 'ASP': -3.50, 'LYS': -3.90, 'ARG': -4.50}
 
         self.residue_names = {'CYS': 0, 'HIS': 1, 'ASN': 2, 'GLN': 3, 'SER': 4, 'THR': 5, 'TYR': 6, 'TRP': 7,
                               'ALA': 8, 'PHE': 9, 'GLY': 10, 'ILE': 11, 'VAL': 12, 'MET': 13, 'PRO': 14, 'LEU': 15,
@@ -50,7 +50,7 @@ class ResidueGraph(Graph):
 
         self.residue_polarity = {'CYS': 'polar', 'HIS': 'polar', 'ASN': 'polar', 'GLN': 'polar', 'SER': 'polar', 'THR': 'polar', 'TYR': 'polar', 'TRP': 'polar',
                                  'ALA': 'apolar', 'PHE': 'apolar', 'GLY': 'apolar', 'ILE': 'apolar', 'VAL': 'apolar', 'MET': 'apolar', 'PRO': 'apolar', 'LEU': 'apolar',
-                                 'GLU': 'neg_charged', 'ASP': 'neg_charged', 'LYS': 'neg_charged', 'ARG': 'pos_charged'}
+                                 'GLU': 'neg_charged', 'ASP': 'neg_charged', 'LYS': 'pos_charged', 'ARG': 'pos_charged'}
 
         self.pssm_pos = {'CYS': 4, 'HIS': 8, 'ASN': 2, 'GLN': 5, 'SER': 15, 'THR': 16, 'TYR': 18, 'TRP': 17,
                          'ALA': 0, 'PHE': 13, 'GLY': 7, 'ILE': 9, 'VAL': 19, 'MET': 12, 'PRO': 14, 'LEU': 10,
