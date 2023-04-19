@@ -9,22 +9,24 @@ from functools import partial
 import pickle
 import torch
 from Bio.PDB.PDBParser import PDBParser
+from Bio import BiopythonWarning
 
 from .ResidueGraph import ResidueGraph
 from .Graph import Graph
 
+warnings.filterwarnings('ignore', category=BiopythonWarning)
 
 class GraphHDF5(object):
 
-    def __init__(self, pdb_path, ref_path=None, graph_type='residue', pssm_path=None,
-                 select=None, outfile='graph.hdf5', nproc=1, use_tqdm=True, tmpdir='./',
-                 limit=None, biopython=False):
+    def __init__(self, pdb_path, ref_path=None, graph_type='residue', pssm_path=None, embedding_path=None,
+                 select=None, outfile='graph.hdf5', nproc=1, use_tqdm=True, tmpdir='./',limit=None, biopython=False):
         """Master class from which graphs are computed
         Args:
             pdb_path (str): path to the docking models
             ref_path (str, optional): path to the reference model. Defaults to None.
             graph_type (str, optional): Defaults to 'residue'.
             pssm_path ([type], optional): path to the pssm file. Defaults to None.
+            embedding_path ([type], optional): path to the embedding file. Defaults to None.
             select (str, optional): filter files that starts with 'input'. Defaults to None.
             outfile (str, optional): Defaults to 'graph.hdf5'.
             nproc (int, optional): number of processors. Default to 1.
@@ -35,9 +37,10 @@ class GraphHDF5(object):
 
             >>> pdb_path = './data/pdb/1ATN/'
             >>> pssm_path = './data/pssm/1ATN/'
+            >>> embedding_path = './data/embedding/1ATN/'
             >>> ref = './data/ref/1ATN/'
 
-            >>> GraphHDF5(pdb_path=pdb_path, ref_path=ref, pssm_path=pssm_path,
+            >>> GraphHDF5(pdb_path=pdb_path, ref_path=ref, pssm_path=pssm_path, embedding_path=embedding_path,
                           graph_type='residue', outfile='1AK4_residue.hdf5')
         """
         # get the list of PDB names
